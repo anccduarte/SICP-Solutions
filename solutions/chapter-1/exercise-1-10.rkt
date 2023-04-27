@@ -229,6 +229,7 @@
 ;prodedure 1 -> equivalent to f(n) = 2*n
 ;---
 (define (f2 n) (* 2 n))
+;---
 ;test for equivalency
 ;---
 (= (f1 2) (f2 2)) (= (f1 3) (f2 3)) (= (f1 4) (f2 4)) (= (f1 5) (f2 5))
@@ -236,6 +237,7 @@
 ;procedure 2 -> equivalent to g(n) = 2^n
 ;---
 (define (g2 n) (fast-exp 2 n))
+;---
 ;test for equivalency
 ;---
 (= (g1 2) (g2 2)) (= (g1 3) (g2 3)) (= (g1 4) (g2 4)) (= (g1 5) (g2 5))
@@ -244,6 +246,7 @@
 ;---
 (define (h2 n)
   (if (= n 0) 1 (fast-exp 2 (h2 (dec n)))))
+;---
 ;test for equivalency
 ;---
 (= (h1 2) (h2 2)) (= (h1 3) (h2 3)) (= (h1 4) (h2 4)) (= (h1 5) (h2 5))

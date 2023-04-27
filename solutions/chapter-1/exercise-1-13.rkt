@@ -67,12 +67,12 @@
 ;-1 < ψ < 0. thus, -1 < ψ^n < 1. dividing all expressions by sqrt(5) yields
 ;-1/sqrt(5) < ψ^n/sqrt(5) < 1/sqrt(5). and since sqrt(5) > 2, the following holds:
 ;-1/2 < -1/sqrt(5) < ψ^n/sqrt(5) < 1/sqrt(5) < 1/2. so, -1/2 < ψ^n/sqrt(5) < 1/2. addiing
-;fib(n) to all expressions yields: fib(n) - 1/2 < fib(n) + ψ^n/sqrt(5) < fib(n) + 1/2.
+;fib(n) to all expressions yields: fib(n) - 1/2 < fib(n) + ψ^n/sqrt(5) < fib(n) + 1/2
 ;---
 ;(*) substituting fib(n) + ψ^n/sqrt(5) by φ^n/sqrt(5), fib(n) - 1/2 < φ^n/sqrt(5) < fib(n) + 1/2.
 ;hence, φ^n/sqrt(5) is contained in the interval (fib(n)-1/2, fib(n)+1/2), which means that
-;the furthest it can be from fib(n) is some distance less than 0.5, which means that, indeed
-;fib(n) is the closest integer to φ^n/sqrt(5)
+;the furthest it can be from fib(n) is some distance less than 1/2. so, indeed, fib(n) is the
+;closest integer to φ^n/sqrt(5)
 ;---
 ;thus, the proof is complete
 

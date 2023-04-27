@@ -50,5 +50,6 @@
   (iter-row 1))
 
 ;test 'print-pascal' for random n
+;---
 (print-pascal 5)
 
