@@ -61,7 +61,7 @@
 ;given amount n is n+5 => O(n)
 ;---
 ;time -> O(n^5)
-;refer to Bill the Lizard's adapted solution
+;refer to a solution adapted from Bill the Lizard's blog post (Sébastien Gignoux)
 ;https://sicp-solutions.net/post/sicp-solution-exercise-1-14/
 
 ;draw the recursion tree originated by (count-change 11)

@@ -60,5 +60,5 @@
 ;the space complexity is O(log(angle))
 ;---
 ;time complexity -> same as space complexity (the number of calls to 'p' also determines
-;the number of operations performed). hence, the time complexity is O(log(n))
+;the number of operations performed). hence, the time complexity is O(log(angle))
 

@@ -9,7 +9,7 @@
 ;halving and uses a logarithmic number of steps.
 ;------------------------------------------------------------------------------------------
 
-;helper methods
+;helper procedures
 ;---
 (define double (lambda (x) (* x 2)))
 (define halve (lambda (x) (/ x 2)))

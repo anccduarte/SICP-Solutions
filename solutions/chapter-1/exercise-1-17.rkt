@@ -15,7 +15,7 @@
 ;steps.
 ;------------------------------------------------------------------------------------------
 
-;(*) procedure for multiplying two number a and b
+;(*) procedure for multiplying two numbers a and b
 ;---
 (define (mult a b)
   (if (= b 0)
