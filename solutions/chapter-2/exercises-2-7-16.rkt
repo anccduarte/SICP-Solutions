@@ -3,39 +3,25 @@
 
 
 ;------------------------------------------------------------------------------------------
-;---
-;INTERVAL ARITHMETIC: EXERCISES 2.7. - 2.16.
-;---
+;EXTENDED EXERCISE: INTERVAL ARITHMETIC (2.7. to 2.16.)
 ;------------------------------------------------------------------------------------------
 
 
 ;------------------------------------------------------------------------------------------
 ;EXERCISE 2.7.
 ;---
-;Alyssa’s program  (SEE BELOW *) is incomplete because she has not specified the
+;Alyssa's program  (SEE BELOW *) is incomplete because she has not specified the
 ;implementation of the interval abstraction. Here is a definition of the interval
 ;constructor (SEE BELOW **). Define selectors 'upper-bound' and 'lower-bound' to complete
 ;the implementation.
 ;------------------------------------------------------------------------------------------
 
-;defining the constructor (**) and selectors for intervals
-;assumes that 'cons' takes a lower bound and an upper bound as arguments
-;---
-(define (make-interval a b) (cons a b))
-(define (lower-bound i) (car i))
-(define (upper-bound i) (cdr i))
-
-
-;------------------------------------------------------------------------------------------
-;INTERVAL ARITHMETIC -> FROM TEXT (*)
-;------------------------------------------------------------------------------------------
-
-;addition of intervals
+;(*) addition of intervals
 (define (add-interval x y)
   (make-interval (+ (lower-bound x) (lower-bound y))
                  (+ (upper-bound x) (upper-bound y))))
 ;---
-;multiplication of intervals -> assumes the intervals may include negative values
+;(*) multiplication of intervals -> assumes the intervals may include negative values
 (define (mul-interval x y)
   (let ((p1 (* (lower-bound x) (lower-bound y)))
         (p2 (* (lower-bound x) (upper-bound y)))
@@ -44,7 +30,7 @@
     (make-interval (min p1 p2 p3 p4)
                    (max p1 p2 p3 p4))))
 ;---
-;division of intervals
+;(*) division of intervals
 ;"Note that the bounds of the reciprocal interval are the reciprocal of the upper bound
 ;and the reciprocal of the lower bound, in that order."
 (define (div-interval x y)
@@ -52,11 +38,18 @@
                 (make-interval (/ 1.0 (upper-bound y))
                                (/ 1.0 (lower-bound y)))))
 
+;(**) defining the constructor and selectors for intervals
+;assumes that 'cons' takes a lower bound and an upper bound as arguments
+;---
+(define (make-interval a b) (cons a b))
+(define (lower-bound i) (car i))
+(define (upper-bound i) (cdr i))
+
 
 ;------------------------------------------------------------------------------------------
 ;EXERCISE 2.8.
 ;---
-;Using reasoning analogous to Alyssa’s, describe how the difference of two intervals may
+;Using reasoning analogous to Alyssa's, describe how the difference of two intervals may
 ;be computed. Define a corresponding subtraction procedure, called 'sub-interval'.
 ;------------------------------------------------------------------------------------------
 
@@ -144,7 +137,7 @@
 ;------------------------------------------------------------------------------------------
 ;EXERCISE 2.10.
 ;---
-;Ben Bitdiddle, an expert systems programmer, looks over Alyssa’s shoulder and comments
+;Ben Bitdiddle, an expert systems programmer, looks over Alyssa's shoulder and comments
 ;that it is not clear what it means to divide by an interval that spans zero. Modify
 ;Alyssa’s code to check for this condition and to signal an error if it occurs.
 ;------------------------------------------------------------------------------------------
@@ -164,7 +157,7 @@
 ;---
 ;In passing, Ben also cryptically comments: "By testing the signs of the endpoints of the
 ;intervals, it is possible to break 'mul-interval' into nine cases, only one of which
-;requires more than two multiplications." Rewrite this procedure using Ben’s suggestion.
+;requires more than two multiplications." Rewrite this procedure using Ben's suggestion.
 ;------------------------------------------------------------------------------------------
 
 ;"reassign" symbols
@@ -285,7 +278,7 @@
 ;represented as a center value and an additive tolerance; for example, he wants to work
 ;with intervals such as (3.5 +/- 0.15) rather than [3.35, 3.65]. Alyssa returns to her
 ;desk and fixes this problem by supplying an alternate constructor and alternate
-;selectors (SEE BELOW *). Unfortunately, most of Alyssa’s users are engineers. Real
+;selectors (SEE BELOW ***). Unfortunately, most of Alyss's users are engineers. Real
 ;engineering situations usually involve measurements with only a small uncertainty,
 ;measured as the ratio of the width of the interval to the midpoint of the interval.
 ;Engineers usually specify percentage tolerances on the parameters of devices, as in the
@@ -296,7 +289,7 @@
 ;tolerance for a given interval. The 'center' selector is the same as the one shown.
 ;------------------------------------------------------------------------------------------
 
-;(*) provided in text
+;(***) provided in text
 ;---
 (define (make-center-width c w)
   (make-interval (- c w) (+ c w)))
@@ -382,15 +375,15 @@
 ;------------------------------------------------------------------------------------------
 ;EXERCISE 2.14.
 ;---
-;Demonstrate that Lem is right (SEE BELOW *). Investigate the behavior of the system on a
-;variety of arithmetic expressions. Make some intervals A and B, and use them in
+;Demonstrate that Lem is right (SEE BELOW ****). Investigate the behavior of the system
+;on a variety of arithmetic expressions. Make some intervals A and B, and use them in
 ;computing the expressions A/A and A/B. You will get the most insight by using intervals
 ;whose width is a small percentage of the center value. Examine the results of the
 ;computation in center-percent form (see Exercise 2.12).
 ;------------------------------------------------------------------------------------------
 
-;(*) distinct implementations of the parallel-resistors formula -> although algebraically
-;equivalent, produce distinct results
+;(****) distinct implementations of the parallel-resistors formula -> although
+;algebraically equivalent, produce distinct results
 ;---
 ;1st formula -> (r1*r2) / (r1+r2)
 (define (par1 r1 r2)
@@ -413,7 +406,7 @@
 ;---
 ;Eva Lu Ator, another user, has also noticed the different intervals computed by
 ;different but algebraically equivalent expressions. She says that a formula to compute
-;with intervals using Alyssa’s system will produce tighter error bounds if it can be
+;with intervals using Alyssa's system will produce tighter error bounds if it can be
 ;written in such a form that no variable that represents an uncertain number is repeated.
 ;Thus, she says, 'par2' is a "better" program for parallel resistances than 'par1'. Is
 ;she right? Why?
