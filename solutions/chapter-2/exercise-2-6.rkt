@@ -4,7 +4,7 @@
 ;------------------------------------------------------------------------------------------
 ;EXERCISE 2.6.
 ;---
-;In case representing pairs as procedures wasn’t mind-boggling enough, consider that, in
+;In case representing pairs as procedures wasn't mind-boggling enough, consider that, in
 ;a language that can manipulate procedures, we can get by without numbers (at least
 ;insofar as nonnegative integers are concerned) by implementing 0 and the operation of
 ;adding 1 as (SEE BELOW). This representation is known as Church numerals, after its
@@ -25,11 +25,11 @@
 
 ;using the substitution model for (add-1 zero):
 ;---
-(add-1 zero)
-(lambda (f) (lambda (x) (f ((zero f) x))))
-(lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) x)) f) x))))
-(lambda (f) (lambda (x) (f ((lambda (x) x) x))))
-(lambda (f) (lambda (x) (f x)))
+;(add-1 zero)
+;(lambda (f) (lambda (x) (f ((zero f) x))))
+;(lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) x)) f) x))))
+;(lambda (f) (lambda (x) (f ((lambda (x) x) x))))
+;(lambda (f) (lambda (x) (f x)))
 
 ;defining 'one' and 'two' directly
 ;---
@@ -38,9 +38,9 @@
 
 ;implementing a procedure for addition (not in terms of 'add-1')
 ;in the implementation of 'add-1', a single function application is performed on the
-;function composition (n f), where n determines the number of times the function is
-;applied. following this logic, instead of applying f a single time (as in 'add-1'), we
-;can apply it an arbitrary number of times to the composition (n f)
+;function composition (n f), where n determines the number of times the function f is
+;applied. instead of applying f a single time (as in 'add-1'), we may apply it an
+;arbitrary number of times
 ;---
 (define (add a b)
   (lambda (f) (lambda (x) ((a f) ((b f) x)))))

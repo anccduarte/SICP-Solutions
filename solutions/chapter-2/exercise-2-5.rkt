@@ -6,7 +6,7 @@
 ;---
 ;Show that we can represent pairs of nonnegative integers using only numbers and
 ;arithmetic operations if we represent the pair 'a' and 'b' as the integer that is the
-;product 2^a 3^b . Give the corresponding definitions of the procedures 'cons', 'car',
+;product 2^a * 3^b. Give the corresponding definitions of the procedures 'cons', 'car',
 ;and 'cdr'.
 ;------------------------------------------------------------------------------------------
 
@@ -28,34 +28,36 @@
 (define (cons-alt x y)
   (* (fast-exp 2 x) (fast-exp 3 y)))
 
+;rationale
+;---
 ;to implement 'car', iteratively divide the result of 'cons' by 2 until the remainder
 ;of result and 2 is non-zero (while result % 2 == 0: result //= 2)
-;'cdr' follows the a similar direction (while result % 3 == 0: result //= 3)
+;similar reasoning for the implementation of 'cdr' (while result % 3 == 0: result //= 3)
+
+;helper procedure that allows to compute the number of times it is possible to divide a
+;given number 'num' by a base 'base' without remainder
 ;---
-;implementation of procedure which allows to compute the number of times it is possible
-;to divide a given number n by a base b without remainder
 (define (num-divs num base)
   (define (iter temp count)
     (if (= (remainder temp base) 0)
         (iter (/ temp base) (inc count))
         count))
   (iter num 0))
-;---
+
 ;defining the selectors ('car' and 'cdr')
+;---
 (define (car-alt p) (num-divs p 2))
 (define (cdr-alt p) (num-divs p 3))
 
 ;test for random pairs
 ;---
-;test 1
-(let ((p (cons-alt 3 7)))
-  (display "cons = ") (display p) (newline)
-  (display "car = ") (display (car-alt p)) (newline)
-  (display "cdr = ") (display (cdr-alt p)) (newline))
+(define (test x y)
+  (let ((p (cons-alt x y)))
+    (display "cons = ") (display p) (newline)
+    (display "car = ") (display (car-alt p)) (newline)
+    (display "cdr = ") (display (cdr-alt p)) (newline)))
 ;---
-;test 2
-(let ((p (cons-alt 34 87)))
-  (display "cons = ") (display p) (newline)
-  (display "car = ") (display (car-alt p)) (newline)
-  (display "cdr = ") (display (cdr-alt p)) (newline))
+(test 3 7)
+(display "---") (newline)
+(test 34 87)
 

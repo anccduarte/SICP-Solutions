@@ -16,12 +16,25 @@
 ;the implementation.
 ;------------------------------------------------------------------------------------------
 
+;" The result of adding, subtracting, multiplying, or dividing two intervals is itself an
+;interval, representing the range of the result."
+
 ;(*) addition of intervals
+;---
+;"Alyssa first writes a procedure for adding two intervals. She reasons that the minimum
+;value the sum could be is the sum of the two lower bounds and the maximum value it could
+;be is the sum of the two upper bounds."
+;---
 (define (add-interval x y)
   (make-interval (+ (lower-bound x) (lower-bound y))
                  (+ (upper-bound x) (upper-bound y))))
-;---
+
 ;(*) multiplication of intervals -> assumes the intervals may include negative values
+;---
+;"Alyssa also works out the product of two intervals by finding the minimum and the
+;maximum of the products of the bounds [p1, p2, p3 and p4] and using them as the bounds
+;of the resulting interval."
+;---
 (define (mul-interval x y)
   (let ((p1 (* (lower-bound x) (lower-bound y)))
         (p2 (* (lower-bound x) (upper-bound y)))
@@ -29,10 +42,13 @@
         (p4 (* (upper-bound x) (upper-bound y))))
     (make-interval (min p1 p2 p3 p4)
                    (max p1 p2 p3 p4))))
-;---
+
 ;(*) division of intervals
-;"Note that the bounds of the reciprocal interval are the reciprocal of the upper bound
+;---
+;"To divide two intervals, Alyssa multiplies the first by the reciprocal of the second.
+;Note that the bounds of the reciprocal interval are the reciprocal of the upper bound
 ;and the reciprocal of the lower bound, in that order."
+;---
 (define (div-interval x y)
   (mul-interval x
                 (make-interval (/ 1.0 (upper-bound y))
@@ -55,15 +71,15 @@
 
 ;in subtracting two intervals A and B, the minimum value is attained by subtracting the
 ;maximum value of B (B's upper bound) from the minimum value of A (A's lower bound), and
-;the maximum value results from subtracting the minimum value of B (B's lower bound)
-;from the maximum value of A (A's upper bound). thus:
+;the maximum value results from subtracting the minimum value of B (B's lower bound) from
+;the maximum value of A (A's upper bound). thus:
 ;A = [la, ua] and B = [lb, ub] => A-B = [la-ub, ua-lb]
 ;---
 (define (sub-interval-v1 x y)
   (make-interval (- (lower-bound x) (upper-bound y))
                  (- (upper-bound x) (lower-bound y))))
 
-;'sub-interval' can also be defined in terms of the addition of intervals
+;'sub-interval' can also be defined in terms of 'add-interval'
 ;---
 (define (sub-interval-v2 x y)
   (add-interval x
@@ -106,15 +122,17 @@
 ;width(A-B) = (ua - lb - la + ub) / 2 = (ua - la) / 2 + (ub - lb) / 2 =
 ;           = width(A) + width(B)
 
-;multiplication and division -> examples
+;multiplication and division - rationale
+;---
 ;if the width of the product/division of two intervals is a function of the width of the
 ;intervals which comprise the arithmetic operation, then multiplying/dividing intervals
 ;of arbitrary widths w1 and w2 should always produce an interval having a fixed width
 ;independent of the lower and upper bounds of the operands
-;---
+
 ;testing multiplication of random intervals with same widths
-;same reasoning can be applied to division
-(display "EXERCISE 2.9.") (newline)
+;(the same reasoning can be applied to division)
+;---
+(newline) (display "EXERCISE 2.9.") (newline)
 (define (print-widths a b)
   (define (width i)
     (/ (- (upper-bound i) (lower-bound i)) 2.0))
@@ -139,7 +157,7 @@
 ;---
 ;Ben Bitdiddle, an expert systems programmer, looks over Alyssa's shoulder and comments
 ;that it is not clear what it means to divide by an interval that spans zero. Modify
-;Alyssa’s code to check for this condition and to signal an error if it occurs.
+;Alyssa's code to check for this condition and to signal an error if it occurs.
 ;------------------------------------------------------------------------------------------
 
 ;if the interval spans zero, throw an error
@@ -211,7 +229,7 @@
 
 ;test both implementations of 'mul-interval' (covering the 9 cases)
 ;---
-(display "EXERCISE 2.11.") (newline)
+(newline) (display "EXERCISE 2.11.") (newline)
 (define (display-interval i)
   (display "[") (display (lower-bound i)) (display ",")
   (display (upper-bound i)) (display "]"))
@@ -303,7 +321,7 @@
 ;constructor -> 'make-center-percent'
 ;percentage tolerance = width / center => width = percentage tolerance * center
 ;if 'center' is a negative number, then 'width' would be negative, which would not make
-;sense. hence, widht = abs(percentage tolerance * center)
+;sense. hence, width = abs(percentage tolerance * center)
 (define (make-center-percent c p)
   (let ((w (abs (* c p))))
     (make-interval (- c w) (+ c w))))
@@ -316,7 +334,7 @@
 
 ;test constructor and selectors
 ;---
-(display "EXERCISE 2.12.") (newline)
+(newline) (display "EXERCISE 2.12.") (newline)
 (let ((A (make-center-percent 6.8 0.1)))
   (display "A = ") (display-interval A) (newline)
   (display "center(A) = ") (display (center A)) (newline)
@@ -336,16 +354,19 @@
 ;---
 ;assume A = [la, ua] and B = [lb, ub], with la>0, lb>0, ua>0 and ub>0
 ;then, the product of the two intervals is given by A*B = [la*lb, ua*ub]
+;---
 ;the intervals A and B may also be represented in terms of percentage tolerances:
 ;A = [ca - ca*pa, ca + ca*pa] and B = [cb - cb*pb, cb +cb*pb]
 ;hence, A*B = [la*lb, ua*ub] = [(ca - ca*pa)*(cb - cb*pb), (ca + ca*pa)*(cb + cb*pb)] =
 ;           = [ca*cb - ca*cb*pb - ca*cb*pa + ca*cb*pa*pb,
 ;              ca*cb + ca*cb*pb + ca*cb*pa + ca*cb*pa*pb]
+;---
 ;the center of an interval I is defined as (lower-bound(I) + upper-bound(I)) / 2
 ;so, the center of the interval A*B is:
 ;center(A*B) = (ca*cb - ca*cb*pb - ca*cb*pa + ca*cb*pa*pb +
 ;              + ca*cb + ca*cb*pb + ca*cb*pa + ca*cb*pa*pb) / 2 =
 ;            = (2*ca*cb + 2*ca*cb*pa*pb) / 2 = ca*cb + ca*cb*pa*pb
+;---
 ;the percentage tolerance of an interval I may be defined in terms of the center of I as
 ;(upper-bound(I) - center(I)) / center(I)
 ;therefore, the percentage tolerance of the interval A*B is:
@@ -353,12 +374,13 @@
 ;                   / (ca*cb + ca*cb*pa*pb) =
 ;                 = (ca*cb*pa + ca*cb*pb) / (ca*cb + ca*cb*pa*pb) =
 ;                 = (ca*cb*(pa+pb)) / (ca*cb*(1+pa*pb)) = (pa+pb) / (1+pa*pb)
+;---
 ;assuming that pa and pb are small, the term pa*pb may be ignored, resulting in:
 ;percent-tol(A*B) = pa+pb = percent-tol(A) + percent-tol(B)
 
 ;testing for some random intervals (with small percentage tolerances)
 ;---
-(display "EXERCISE 2.13.") (newline)
+(newline) (display "EXERCISE 2.13.") (newline)
 (let ((A (make-center-percent 10 0.05))
       (B (make-center-percent 4 0.06)))
   (let ((C (mul-interval A B)))
@@ -366,8 +388,7 @@
           (perc-b (percent B))
           (perc-c (percent C)))
       (display "percent-tol(C) (actual) = ") (display perc-c) (newline)
-      (display "percent-tol(C) (estimated) = ")
-      (display (+ perc-a perc-b)) (newline)
+      (display "percent-tol(C) (estimated) = ") (display (+ perc-a perc-b)) (newline)
       (let ((abs-diff (abs (- (+ perc-a perc-b) perc-c))))
         (display "abs-diff(actual, estimated) = ") (display abs-diff) (newline)))))
 
