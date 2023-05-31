@@ -41,5 +41,6 @@
 ;  with the 'car' of the original list added to them
 ;---
 ;that is:
-;subsets(lst) = subsets(cdr(lst)) + map(add-car-of-lst, subsets(cdr(lst)))
+;subsets(lst) = list(nil), if null?(lst)
+;               subsets(cdr(lst)) + map(add-car-of-lst, subsets(cdr(lst))), otherwise
 
