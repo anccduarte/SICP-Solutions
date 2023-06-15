@@ -14,13 +14,14 @@
 ;d. The 'wave' painter.
 ;------------------------------------------------------------------------------------------
 
-;the following procedures available in 'sicp-pict' are used for convenience:
+;the following procedures (available in 'sicp-pict') are used for convenience:
 ;- 'make-vect', 'vector-xcor', 'vector-ycor'
 ;- 'vector-add', 'vector-scale'
 ;- 'make-frame', 'frame-origin', 'frame-edge1', 'frame-edge2'
 ;- 'make-segment', 'segment-start', 'segment-end'
+;- 'segments->painter' (textbook implementation below)
 
-;'frame-coord-map' -> helper
+;'frame-coord-map' -> helper (textbook implementation)
 ;---
 (define (frame-coord-map frame)
   (lambda (vec)
@@ -30,7 +31,7 @@
                             (vector-scale (vector-ycor vec)
                                           (frame-edge2 frame))))))
 
-;'segments->painter' -> helper
+;'segments->painter' -> helper (textbook implementation)
 ;---
 (define (for-each proc lst)
   (cond ((null? lst)
@@ -46,7 +47,7 @@
   (display end)
   (newline))
 ;---
-(define (segments->painters seg-list)
+(define (my-segments->painter seg-list)
   (lambda (frame)
     (let ((coord-map (frame-coord-map frame)))
       (for-each (lambda (segment)
@@ -54,13 +55,6 @@
                    (coord-map (segment-start segment))
                    (coord-map (segment-end segment))))
                 seg-list))))
-
-;frame to be shared by all painters (unit square)
-;---
-(define origin (make-vect 0 0))
-(define edge1 (make-vect 1 0))
-(define edge2 (make-vect 0 1))
-(define frame (make-frame origin edge1 edge2))
 
 ;a.
 ;---
@@ -124,7 +118,8 @@
 (display "  ") (display (paint waver4))
 
 ;extra -> square limit of 'waver4'
-;('corner-split' is slightly distinct from the textbook's implementation)
+;('corner-split' implementation is slightly different from the one presented in the
+;textbook; as a result 'square-limit' produces a distinct output)
 ;---
 (define (up-split painter n)
   (if (= n 0)
