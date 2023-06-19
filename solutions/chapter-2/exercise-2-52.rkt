@@ -20,10 +20,12 @@
 ;------------------------------------------------------------------------------------------
 
 ;the following procedures (available in 'sicp-pict') are used for convenience:
+;---
 ;- 'make-vect'
 ;- 'make-segment'
 ;- 'segments->painter'
-;- 'flip-horiz', 'flip-vert', 'beside', 'below'
+;- 'identity', 'rotate180', 'flip-horiz', 'flip-vert'
+;- 'beside', 'below'
 
 ;a. defining a new version of 'wave'
 ;---

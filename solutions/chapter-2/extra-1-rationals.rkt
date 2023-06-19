@@ -117,9 +117,7 @@
            (error "Not implemented!"))))
 
   ;return 'dispatch' ready to be called
-  dispatch
-
-  )
+  dispatch)
 
 
 ;------------------------------------------------------------------------------------------

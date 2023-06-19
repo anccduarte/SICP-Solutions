@@ -12,6 +12,7 @@
 
 
 ;the following procedures (available in 'sicp-pict') are used for convenience:
+;---
 ;- 'make-vect', 'vector-xcor', 'vector-ycor'
 ;- 'vector-add', 'vector-sub', 'vector-scale'
 ;- 'make-frame', 'frame-origin', 'frame-edge1', 'frame-edge2'

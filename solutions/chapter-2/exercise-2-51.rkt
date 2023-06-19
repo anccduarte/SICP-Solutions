@@ -13,6 +13,7 @@
 ;------------------------------------------------------------------------------------------
 
 ;the following procedures (available in 'sicp-pict') are used for convenience:
+;---
 ;- 'make-vect', 'vector-xcor', 'vector-ycor'
 ;- 'vector-add', 'vector-sub', 'vector-scale'
 ;- 'make-frame', 'frame-origin', 'frame-edge1', 'frame-edge2'
@@ -84,7 +85,7 @@
               s))))
 
 ;'below-v3'
-;(much smarter than the previous version -> in terms of rotators)
+;(much smarter and less intricate than the previous version -> in terms of rotators)
 ;---
 (define (below-v3 painter1 painter2 s)
   (rotate90 (beside (rotate270 painter1)
