@@ -174,7 +174,7 @@
 ;         (else
 ;          (error "bad type:" (type z)))))
 
-; the operations on complex numbers (USE) would then be implemeneted in terms of these
+; the operations on complex numbers (USE) would then be implemented in terms of these
 ; generic selectors. see how the representation is completely isolated from the use
 ; ('real-part' and 'imag-part' call the adequate procedure based on the tag of its
 ; arguments - 'rectangular' or 'polar')
@@ -217,7 +217,7 @@
 ; procedures [at the right row and column]. In some sense, all the manager is doing is
 ; acting as this table. Well, how do we fix our system? What you do is you get rid of the
 ; manager. We just take the manager and replace him by a computer. We're going to
-; automate him out of existence. Namely, instead of having the manager who basically
+; automate him out of existence. Namely, instead of having the manager, who basically
 ; consults this table, we'll have our system use the table directly. Given this table,
 ; what do George and Martha have to do? Well, when they build their system, they each
 ; have the responsibility to set up their appropriate column in the table. So, what
@@ -229,6 +229,11 @@
 ; UNDER THE SECTION 'GENERIC OPERATIONS']
 
 ; creating table and installing rectangular and polar operations
+; (very inelegant strategy for populating a table; a more sophisticated implementation of
+; tables, namely the procedure 'put', should allow for updating the existing table
+; without having to construct a new one whenever a new entry is added; also note that,
+; since names cannot be reassigned to new values in scheme, the user has to remember the
+; name of the latest version of the table in order to adequately update the system)
 ; ---
 (define complex-table-init (empty-table))
 ; ---
@@ -286,9 +291,9 @@
 ; (real-part-polar (contents z))
 ; (real-part-polar (1 . 2))
 
-; now, imagine that we want our complex number package to be part of a more complex
-; package that performs operations on arbitrary types of numbers. it would look something
-; like the following
+; now, imagine that we want our complex number package to be part of a more complex and
+; complete package that performs operations on arbitrary types of numbers. it would look
+; something like the following
 ; ---
 ;                   ADD          SUB          MUL          DIV
 ; ----------------------||------------------------------||------------------------
@@ -527,7 +532,9 @@
 
 ; construct table of generic operations
 ; (installing operators for complex numbers, rational numbers, ordinary numbers and
-; polynomials - only addition and subtraction)
+; polynomials - only addition and subtraction; see "creating table and installing
+; rectangular and polar operations" for some considerations on the inefficiencies
+; associated to the current implementation of tables)
 ; ---
 (define ops-table-init (empty-table))
 ; ---
