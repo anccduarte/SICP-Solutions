@@ -122,7 +122,9 @@
   ;division is the second entry of the respective record)
   (define (get-salary name file)
     (let ((record (get 'get-record 'div1)))
-      (cadr record)))
+      (if record
+          (cadr record)
+          #f)))
   ;installing the procedure in the system
   (put 'get-salary 'div1 get-salary))
 
