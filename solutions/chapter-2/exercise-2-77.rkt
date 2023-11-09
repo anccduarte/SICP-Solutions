@@ -62,7 +62,7 @@
 ;(apply-generic 'magnitude '(rectangular 3 4))
 ;((get 'magnitude (type '(rectangular 3 4))) (contents '(rectangular 3 4)))
 ;((get 'magnitude 'rectangular) '(3 4))
-;(magnitude-rectangular 3 4)
+;(magnitude-rectangular '(3 4))
 ;(sqrt (+ (square 3) (square 4)))
 ;5
 
