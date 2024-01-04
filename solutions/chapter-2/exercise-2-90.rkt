@@ -9,7 +9,7 @@
 ;our system. The situation is analogous to the complex-number example of Section 2.4,
 ;where we allowed both rectangular and polar representations. To do this we must
 ;distinguish different types of term lists and make the operations on term lists generic.
-;Redesign the polynomial system to implement this generalization. THis is a major effort,
+;Redesign the polynomial system to implement this generalization. This is a major effort,
 ;not a local change.
 ;------------------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@
 ;representations may coexist in the same environment, a "vertical" abstraction barrier
 ;between them must be erected. Then, interface procedures permitting the communication
 ;with the rest of the system must be devised. Finally, a "generic" polynomial package
-;ought to be implemented.
+;ought to be implemented. For a more nuanced implemetation, visit Exercise 2.92.
 
 ;dealing with type tags -> helper procedures
 ;---
