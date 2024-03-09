@@ -17,7 +17,7 @@
 ;---
 (define (count-pairs x)
   ;---
-  (let ((visited '(visited)))
+  (let ((visited '()))
     ;---
     (define (to-add p)
       (if (memq p visited)
