@@ -34,7 +34,7 @@
 ;generally, (eq? x y) tests whether 'x' and 'y' are the same object (that is, whether 'x'
 ;and 'y' are equal as pointers)."
 
-;!!!
+;a final note on sharing and mutability
 ;---
 ;"The mutation operations 'set-car!' and 'set-cdr!' should be used with care; unless we
 ;have a good understanding of how our data objects are shared, mutation can have
