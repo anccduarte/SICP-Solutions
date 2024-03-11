@@ -9,7 +9,7 @@
 ;------------------------------------------------------------------------------------------
 
 ;'contains-cycle?'
-;(the exact same solution to Exercise 3.18 is provided here; such an implements requires
+;(the exact same solution to Exercise 3.18 is provided here; such a solution requires
 ;a constant amount of space and time, since, in the worst case scenario, the list of
 ;visited pairs 'visited' is to contain at maximum the number of pairs included in the
 ;list passed as argument to 'contains-cycle?'; for an alternative solution implemeting
