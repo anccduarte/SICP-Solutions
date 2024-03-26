@@ -12,7 +12,6 @@
 ;(Compare Exercise 2.66 of Chapter 2.)
 ;------------------------------------------------------------------------------------------
 
-
 ;pictoreal representation of tables [using trees]
 ;---
 ;note that the current representation does not need an indication '*table*' for the
@@ -164,7 +163,6 @@
                 (branch-outwards! keys tree left-tree set-left-tree!))
                (else
                 (branch-outwards! keys tree right-tree set-right-tree!))))))
-
 
 ;test table ['insert!' and 'lookup']
 ;---
