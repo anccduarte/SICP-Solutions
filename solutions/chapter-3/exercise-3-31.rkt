@@ -44,7 +44,7 @@
 ;      |                           F                  |
 ; A -----------+--- or-  -------------------- and- ------- S(um)
 ;      |   +---|--- gate    +--- inverter --- gate    |
-;      |   |   |            | D            E          |
+;      |   |   |            |              E          |
 ;      |   |   +--- and- ---+----------------------------- C(arry)
 ; B -------+------- gate                              |
 ;      |                                              |
@@ -53,57 +53,131 @@
 
 ;------------------------------------------------------------------------------------------
 ;1st SCENARIO
-;(action procedures are not initialized when added)
+;(action procedures are not called when added to the action procedure list)
 ;------------------------------------------------------------------------------------------
 
-;tracing procedure calls
+;prelude
 ;---
-;      | init half-adder | (set-signal! A 1) | (set-signal! B 1)
-; -----+-----------------+-------------------+-------------------
-;   A  |       0         |         1         |         1
-;   B  |       0         |         0         |         1
-;   D  |       0         |         0         |         1
-;   E  |       0         |         1         |         0
-;   F  |       0         |         0         |         1
-;   S  |       0         |     --> 0 <--     |         0
-;   C  |       0         |         0         |         1
+;calling an action procedure immediately after it is added to the wire's action procedure
+;list, adds the corresponding lambda expression (setting the output signal) to the agenda
+;('the-agenda'); these lambda expressions initially added to 'the-agenda' may be regarded
+;as the circuit's initializers; as we'll see below, not initilizing circuits may have
+;rather pernicious effects on subsequent computations; for reasons of simplicity, it is
+;assumed that 'the-agenda' is a list of lambda expressions
 
-;analyzing the results
+;(half-adder A B S C)
 ;---
-;assuming that the action procedures are not executed when added to the action procedure
-;list of a wire, any abstraction (e.g., 'half-adder') built on top of the circuit
-;language primitives (i.e., 'inverter', 'or-gate' and 'and-gate') is to have all its
-;inherent wires initialized to 0; the pernicious effects of such a circumstance is well
-;noted upon studying the behavior of 'half-adder': setting signal A to 1 and leaving
-;signal B as is should produce a sum (S) of 1 and a carry (C) of 0; however, because
-;signal E is left untouched upon initialization of the circuit, S (the result of E and F
-;logical-and) outputs 0 instead of 1; the nocive effects of not executing action
-;procedures upon initialization are dissipated after setting signal B to 1 (i.e., all
-;wires output as expected)
+;- 'the-agenda' stays as is -> '()
+
+;(set-signal! A 1)
+;---
+;- A's signal is set to 1
+;- and-gate and or-gate action procedures are called (the respective lambda expressions
+;  are added to 'the-agenda')
+
+;(propagate)
+;---
+;- tries setting signal C, but fails (A and B -> 0, and D is already 0)
+;---
+;- F's signal is set to 1 (A or B -> 1)
+;- and-gate action procedure (relative to the rightmost and-gate) is called , adding the
+;  respective lambda expression to 'the-agenda'
+;---
+;- tries setting signal S, but fails (E and F -> 0, and S is already 0)
+
+;conclusion
+;---
+;the signals of the ouput wires, S and C, should be set to 1 and 0, respectively, given
+;that the binary addition of 1 (A) and 0 (B) yields a sum of 1 and a carry of 0; the
+;absence of circuit "initialization" resulted in both signals being evaluated to 0
 
 
 ;------------------------------------------------------------------------------------------
 ;2nd SCENARIO
-;(action procedures are initialized when added)
+;(action procedures are called when added to the action procedure list)
 ;------------------------------------------------------------------------------------------
 
-;tracing procedure calls
+;prelude
 ;---
-;      | init half-adder | (set-signal! A 1) | (set-signal! B 1)
-; -----+-----------------+-------------------+-------------------
-;   A  |       0         |         1         |         1
-;   B  |       0         |         0         |         1     
-;   D  |       0         |         0         |         1
-;   E  |       1         |         1         |         0
-;   F  |       0         |         1         |         1
-;   S  |       0         |         1         |         0
-;   C  |       0         |         0         |         1
+;in the present section, we substantiate the need for initializing the circuit's wires
+;upon the addition of action procedures to the respective action procedure lists; to do
+;so, we track the exact same process as before and compare the results of both schemes
 
-;analyzing the results
+;(half-adder A B S C)
 ;---
-;if action procedures are executed when added to the action procedure list, all wires
-;ouput as expected:
-;1. if A and B are 0, both the sum (S) and the carry (C) evaluate to 0;
-;2. if A is 1 and B is 0, S evaluates to 1 and C to 0
-;3. if A and B are 1, S evaluates to 0 and C to 1
+;- 'the-agenda' -> '((lambda () (set-signal! C (logical-and A B)))   ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! C (logical-and A B)))   ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B)))    ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B)))    ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! E (logical-not C)))     ;C -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 0
+;                    (lambda () (set-signal! S (logical-and E F))))  ;E -> 0 and F -> 0
+
+;(set-signal! A 1)
+;---
+;- A's signal is set to 1
+;- 'the-agenda' -> '((lambda () (set-signal! C (logical-and A B)))   ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! C (logical-and A B)))   ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B)))    ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B)))    ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! E (logical-not C)))     ;C -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 0
+;                    (lambda () (set-signal! C (logical-and A B)))   ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B))))   ;A -> 1 and B -> 0
+
+;(propagate)
+;---
+;- tries setting signal C, but fails (A and B -> 0, and D -> 0)
+;- 'the-agenda' -> '((lambda () (set-signal! F (logical-or A B)))    ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B)))    ;A -> 0 and B -> 0
+;                    (lambda () (set-signal! E (logical-not C)))     ;C -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 0
+;                    (lambda () (set-signal! C (logical-and A B)))   ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B))))   ;A -> 1 and B -> 0
+;---
+;- F's signal is set to 1 (A or B -> 1)
+;- lambda expression is added to 'the-agenda'
+;- 'the-agenda' -> '((lambda () (set-signal! E (logical-not C)))     ;C -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 0
+;                    (lambda () (set-signal! C (logical-and A B)))   ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B)))    ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! S (logical-and E F))))  ;E -> 0 and F -> 1
+;---
+;- E's signal is set to 1 (not C -> 1)
+;- lambda expression is added to 'the-agenda'
+;- 'the-agenda' -> '((lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 1
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 1
+;                    (lambda () (set-signal! C (logical-and A B)))   ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B)))    ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 1
+;                    (lambda () (set-signal! S (logical-and E F))))  ;E -> 1 and F -> 1
+;---
+;- tries setting signal S, but fails (E and F -> 0, and S -> 0)
+;- 'the-agenda' -> '((lambda () (set-signal! C (logical-and A B)))   ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! F (logical-or A B)))    ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 1
+;                    (lambda () (set-signal! S (logical-and E F))))  ;E -> 1 and F -> 1
+;---
+;- tries setting signal C, but fails (A and B -> 0, and S -> 0)
+;- 'the-agenda' -> '((lambda () (set-signal! F (logical-or A B)))    ;A -> 1 and B -> 0
+;                    (lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 1
+;                    (lambda () (set-signal! S (logical-and E F))))  ;E -> 1 and F -> 1
+;---
+;- tries setting signal F, but fails (A or B -> 1, and F -> 1)
+;- 'the-agenda' -> '((lambda () (set-signal! S (logical-and E F)))   ;E -> 0 and F -> 1
+;                    (lambda () (set-signal! S (logical-and E F))))  ;E -> 1 and F -> 1
+;---
+;- tries setting signal S, but fails (E and F -> 0, and S -> 0)
+;- 'the-agenda' -> '((lambda () (set-signal! S (logical-and E F))))  ;E -> 1 and F -> 1
+;---
+;- S's signal is set to 1 (E and F -> 1)
+
+;conclusion
+;---
+;initializing the circuit paid off as expected: setting the signal of wire A to 1 yielded
+;the anticipated result, that is, the signals of wires S and C were set to the values 1
+;and 0, respectively
 
