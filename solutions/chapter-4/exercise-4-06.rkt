@@ -22,7 +22,7 @@
 ;clause to 'eval' to handle 'let' expressions.
 ;------------------------------------------------------------------------------------------
 
-;synatx for 'let'
+;syntax for 'let'
 ;---
 (define (let? exp) (tagged-list? exp 'let))
 (define (let-vars-values exp) (cadr exp))
@@ -40,7 +40,7 @@
 ;'let->combination' [syntactic transformation of 'let' onto 'lambda']
 ;---
 (define (let->combination exp)
-  (list (make-lambda
+  (cons (make-lambda
          (let-vars (let-vars-values exp))
          (let-body exp))
         (let-vals (let-vars-values exp))))
