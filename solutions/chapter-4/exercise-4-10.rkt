@@ -22,7 +22,7 @@
 ;by the name of postfix notation, in which the types of expressions or the operator in a
 ;combination is the rightmost element in the expression. For example, a procedure for
 ;adding two numbers 'a' and 'b' would be called as (a b +). The task of implementing the
-;whole set of syntax procedures is stenuous; hence, we solely provide for procedures that
+;whole set of syntax procedures is strenuous; hence, we only provide for procedures that
 ;extract all elements but the last and the rearest element of a combination (i.e., to get
 ;the type/operator of an expression). The remnant syntax procedures are straightforwardly
 ;implemented as further selection on the elements yielded by the former procedure [for a
