@@ -19,20 +19,30 @@
 ;(either halting or running forever) violates the intended behavior of 'halts?'.
 ;------------------------------------------------------------------------------------------
 
-;Proof by counterexample
+;Proof by contradiction
+;[heavily inspired by Sipser's proof in "Introduction to the Theory of Computation"]
 ;---
-;Suppose we have a procedure 'halts?' that determines whether a procedure 'p', when
-;applied to its sole argument 'a', halts. This procedure returns #t if the execution of
-;(p a) halts, and #f otherwise. So far, so good. Now, suppose we devise a procedure 'try'
-;that, given a procedure 'p' as input, first tests (halts? p p) and proceeds as follows:
-;if it does halt, it enters an infinite loop; else, it returns the symbol 'halted. Given
-;these constraints, consider calling (try try). The program starts by performing the test
-;(halts? try try). It then, counterintuitively, enters an infinite loop if the program
-;halts and returns the symbol 'haulted otherwise. Note that the described modus operandi
-;constitutes a counterexample in the sense that calling 'halts?' with both arguments 'p'
-;and 'a' set to 'try' misjudges whether (try try) halts. Hence, it is impossible to
-;compose a procedure 'halts?' that correctly determines whether 'p' halts on 'a' for any
-;given procedure 'p' and object 'a'. [See Geoffrey K. Pullum's brilliant poem available
-;at "http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html" for "A proof that the Halting
-;Problem is undecidable".]
+;Suppose we have a procedure 'H' that determines whether a procedure 'p', when applied to
+;its sole argument <a>, halts and accepts <a> or halts and rejects its argument. In
+;essence, 'H' is a procedure such that
+;---
+;H(<p,a>) = | accept if 'p' accepts <a>
+;           | reject if 'p' does not accept <a>
+;---
+;Assuming that 'H' does exist, we may readily construct procedure 'D' of one argument 'p'
+;that extends the functioning of 'H' as follows: 1. executes 'H' with arguments <p, <p>>
+;(i.e., checks the halting behavior of 'p' run on <p>); 2. outputs the opposite of the
+;outcome of 'H'. In other words, 'D' is a procedure such that
+;---
+;D(<p>) = | accept if 'p' does not accept <p>
+;         | reject if 'p' accepts <p>
+;---
+;Now, suppose that we run 'D' having <D> has its input. In such a circumstance, we get
+;the following behavior
+;---
+;D(<p>) = | accept if 'D' does not accept <D>
+;         | reject if 'D' accepts <D>
+;---
+;"No matter what 'D' does, it is forced to do the opposite, which obviously constitutes a
+;contradiction. Thus, neither 'D' nor 'H' can exist."
 
